@@ -92,7 +92,7 @@ class Reply
         Reply.new(reply.first)
     end
 
-    def inititalize(options)
+    def initialize(options)
         @id = options['id']
         @question_id = options['question_id']
         @parent_reply_id = options['parent_reply_id']

@@ -96,8 +96,11 @@ VALUES
     ((SELECT id FROM questions WHERE title = 'Electrical'),
     NULL,
     (SELECT id FROM users WHERE fname = 'Jeff' AND lname = 'Heff'),
-    'Check the battery'),
-    
+    'Check the battery');
+
+INSERT INTO 
+    replies (question_id, parent_reply_id, author_id, body)
+VALUES 
     ((SELECT id FROM questions WHERE title = 'Electrical'),
     (SELECT id FROM replies WHERE body = 'Check the battery'),
     (SELECT id FROM users WHERE fname = 'Mary' AND lname = 'Bary'),
