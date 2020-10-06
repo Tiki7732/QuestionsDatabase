@@ -64,6 +64,10 @@ class Question
     def replies
         replies = Reply.find_by_question_id(self.id)
     end
+
+    def followers
+        users = QuestionFollow.followers_for_question_id(self.id)
+    end
 end
 
 class User
@@ -106,6 +110,10 @@ class User
 
     def authored_replies
         replies = Reply.find_by_author_id(self.id)
+    end
+
+    def followed_questions
+        questions = QuestionFollow.followed_questions_for_user_id(self.id)
     end
 end
 
@@ -175,5 +183,30 @@ class Reply
         WHERE parent_reply_id = ?
         SQL
         Reply.new(child_reply.first)
+    end
+end
+
+class QuestionFollow
+
+    attr_accessor :id, :user_id, :questoin_id
+
+    def self.followers_for_question_id(question_id)
+        users = QuestionDatabase.instance.execute(<<-SQL, question_id)
+        SELECT *
+        FROM users
+        JOIN question_follows ON user_id = users.id
+        WHERE question_id = ?
+        SQL
+        users
+    end
+
+    def self.followed_questions_for_user_id(user_id)
+        questions = QuestionDatabase.instance.execute(<<-SQL, user_id)
+        SELECT *
+        FROM questions
+        JOIN question_follows ON question_id = questions.id
+        WHERE user_id = ?
+        SQL
+        questions
     end
 end
