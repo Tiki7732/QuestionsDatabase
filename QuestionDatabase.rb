@@ -242,4 +242,14 @@ class QuestionLike
         SQL
         likers.map{|user| User.new(user)}
     end
+
+    def self.num_likes_for_question_id(question_id)
+        likes = QuestionDatabase.instance.execute(<<-SQL, question_id)
+        SELECT COUNT(*) AS likes
+        FROM questions
+        JOIN question_likes ON question_likes.question_id = questions.id
+        WHERE question_likes.question_id = ?
+        SQL
+    end
+
 end
