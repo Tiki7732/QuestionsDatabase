@@ -69,7 +69,7 @@ VALUES
     (SELECT id FROM users WHERE fname = 'Joe' AND lname = 'Blo')),
 
     ('Gas', "I cant get the gas to flow, there is gas in the tank but nothing at the injectors",
-    (SELECT id FROM users WHERE fname = 'Jim' AND lname = 'Bim')),
+    (SELECT id FROM users WHERE fname = 'Joe' AND lname = 'Blo')),
 
     ('Air Flow', "How can I increase air flow through the carb?", 
     (SELECT id FROM users WHERE fname = 'Jeff' AND lname = 'Heff')),
@@ -120,4 +120,8 @@ VALUES
     ((SELECT id FROM users WHERE fname = 'Joe' AND lname = 'Blo'),
     (SELECT id FROM questions WHERE title = 'Chain')),
     ((SELECT id FROM users WHERE fname = 'Jeff' AND lname = 'Heff'),
-    (SELECT id FROM questions WHERE title = 'Tires'));
+    (SELECT id FROM questions WHERE title = 'Tires')),
+    ((SELECT id FROM users WHERE fname = 'Pam' AND lname = 'Glam'),
+    (SELECT id FROM questions WHERE title = 'Electrical')),
+    ((SELECT id FROM users WHERE fname = 'Joe' AND lname = 'Blo'),
+    (SELECT id FROM questions WHERE title = 'Electrical'));
