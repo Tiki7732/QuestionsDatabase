@@ -228,3 +228,18 @@ class QuestionFollow
         followed.map{|question| Question.new(question)}
     end
 end
+
+class QuestionLike
+
+    attr_accessor :id, :user_id, :question_id
+
+    def self.likers_for_question(question_id)
+        likers = QuestionDatabase.instance.execute(<<-SQL, question_id)
+        SELECT *
+        FROM users
+        JOIN question_likes ON users.id = user_id
+        WHERE question_likes.question_id = ?
+        SQL
+        likers.map{|user| User.new(user)}
+    end
+end
