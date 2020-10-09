@@ -73,6 +73,13 @@ class Question
         users = QuestionFollow.followers_for_question_id(self.id)
     end
 
+    def likers
+        likers = QuestionLike.likers_for_question(self.id)
+    end
+
+    def num_likes
+        num = QuestionLike.num_likes_for_question_id(self.id)
+    end
 
 end
 
@@ -120,6 +127,10 @@ class User
 
     def followed_questions
         questions = QuestionFollow.followed_questions_for_user_id(self.id)
+    end
+
+    def liked_questions 
+        questions = QuestionLike.liked_questions_for_user_id(self.id)
     end
 end
 
