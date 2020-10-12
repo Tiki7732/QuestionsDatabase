@@ -13,7 +13,8 @@ end
 
 class Question
 
-    attr_accessor :id, :title, :body, :author_id
+    attr_reader :id
+    attr_accessor :title, :body, :author_id
 
     def self.all
         data = QuestionDatabase.instance.execute("SELECT * FROM questions")
@@ -83,6 +84,23 @@ class Question
 
     def num_likes
         num = QuestionLike.num_likes_for_question_id(self.id)
+    end
+
+    def save
+        if @id
+            QuestionDatabase.instance.execute(<<-SQL, @title, @body, @author_id, @id)
+            UPDATE questions
+            SET title = ?, body = ?, author_id = ?
+            WHERE questions.id = ?
+            SQL
+        else
+            QuestionDatabase.instance.execute(<<-SQL, @title, @body, @author_id)
+            INSERT INTO questions (title, body, author_id)
+            VALUES (?, ?, ?)
+            SQL
+            @id = QuestionDatabase.instance.last_insert_row_id
+        end
+        self
     end
 
 end
