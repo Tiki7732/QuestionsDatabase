@@ -106,7 +106,8 @@ class Question
 end
 
 class User
-    attr_accessor :id, :fname, :lname
+    attr_reader :id
+    attr_accessor :fname, :lname
 
     def self.all
         data = QuestionDatabase.instance.execute("SELECT * FROM users")
@@ -168,11 +169,29 @@ class User
         average_likes = like_count/questions_count.to_f
 
     end
+
+    def save
+        if @id
+            QuestionDatabase.instance.execute(<<-SQL, @fname, @lname, @id)
+            UPDATE users
+            SET fname = ?, lname = ?
+            WHERE users.id = ?
+            SQL
+        else
+            QuestionDatabase.instance.execute(<<-SQL, @fname, @lname)
+            INSERT INTO users (fname, lname)
+            VALUES (?, ?)
+            SQL
+            @id = QuestionDatabase.instance.last_insert_row_id
+        end
+        self
+    end
 end
 
 class Reply
 
-    attr_accessor :id, :question_id, :parent_reply_id, :author_id, :body
+    attr_reader :id
+    attr_accessor :question_id, :parent_reply_id, :author_id, :body
 
     def self.all
         data = QuestionDatabase.instance.execute("SELECT * FROM replies")
