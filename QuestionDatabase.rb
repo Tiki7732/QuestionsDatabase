@@ -256,6 +256,23 @@ class Reply
         SQL
         Reply.new(child_reply.first)
     end
+
+    def save
+        if @id
+            QuestionDatabase.instance.execute(<<-SQL, @question_id, @parent_reply_id, @author_id, @body, @id)
+            UPDATE replies
+            SET question_id = ?, parent_reply_id = ?, author_id = ?, body = ?
+            WHERE replies.id = ?
+            SQL
+        else
+            QuestionDatabase.instance.execute(<<-SQL, @question_id, @parent_reply_id, @author_id, @body)
+            INSERT INTO replies (question_id, parent_reply_id, author_id, body)
+            VALUES (?, ?, ?, ?)
+            SQL
+            @id = QuestionDatabase.instance.last_insert_row_id
+        end
+        self
+    end
 end
 
 class QuestionFollow
